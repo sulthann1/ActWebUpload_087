@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Unggah File</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e8a5fc; 
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+        h2 { color: #333; margin-top: 0; }
+        .file-input-wrapper {
+            margin: 20px 0;
+            text-align: left;
+        }
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #f9f9f9;
+        }
+        .btn-submit {
+            background-color: #4f46e5;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            transition: 0.3s;
+        }
+        .btn-submit:hover { background-color: #4338ca; }
+        .preview-box {
+            margin-top: 20px;
+            padding: 15px;
+            border: 2px dashed #cbd5e1;
+            border-radius: 10px;
+            display: none; 
+        }
+        #preview-img { max-width: 100%; max-height: 200px; border-radius: 8px; margin-top: 10px; display: none; }
+        .btn-lihat {
+            display: inline-block;
+            margin-top: 15px;
+            color: #4f46e5;
+            text-decoration: none;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <h2>Unggah Berkas Baru</h2>
+    <form action="upload.php" method="post" enctype="multipart/form-data">
+        <div class="file-input-wrapper">
+            <input type="file" name="fileToUpload" id="fileToUpload" required>
+        </div>
+        
+        <div class="preview-box" id="preview-container">
+            <p id="file-info" style="margin:0; font-size: 14px; color: #555;"></p>
+            <img id="preview-img" src="" alt="Preview Gambar">
+        </div>
+        <br>
+        <input type="submit" value="Unggah Sekarang" name="submit" class="btn-submit">
+    </form>
+    <a href="lihat_file.php" class="btn-lihat">Lihat Daftar Berkas &rarr;</a>
+</div>
+
+<script>
+    const fileInput = document.getElementById('fileToUpload');
+    const previewContainer = document.getElementById('preview-container');
+    const fileInfo = document.getElementById('file-info');
+    const previewImg = document.getElementById('preview-img');
+
+    fileInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            previewContainer.style.display = 'block';
+            const fileSize = (file.size / 1024).toFixed(2);
+            fileInfo.innerHTML = `<strong>${file.name}</strong> (${fileSize} KB)`;
+
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.src = e.target.result;
+                    previewImg.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            } else {
+                previewImg.style.display = 'none';
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
